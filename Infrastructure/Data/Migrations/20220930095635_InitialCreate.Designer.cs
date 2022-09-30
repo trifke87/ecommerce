@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20220929141414_InitialCreate")]
+    [Migration("20220930095635_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,21 +27,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("Core.Entities.CartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CartId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
@@ -49,9 +35,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
-
-                    b.ToTable("CartItems");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Core.Entities.Customer", b =>
@@ -160,23 +144,11 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Core.Entities.CartItem", b =>
-                {
-                    b.HasOne("Core.Entities.Cart", null)
-                        .WithMany("Items")
-                        .HasForeignKey("CartId");
-                });
-
             modelBuilder.Entity("Core.Entities.OrderItem", b =>
                 {
                     b.HasOne("Core.Entities.Order", null)
                         .WithMany("ItemOrdered")
                         .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("Core.Entities.Cart", b =>
-                {
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Core.Entities.Order", b =>

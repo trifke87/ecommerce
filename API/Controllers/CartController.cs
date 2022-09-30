@@ -19,9 +19,9 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddToShopingCart(int customerId, int productId, int quantity)
         {
-            await _repo.AddProductToCartAsync(customerId, productId, quantity);
+            var response = await _repo.AddProductToCartAsync(customerId, productId, quantity);
 
-            return Ok();
+            return Ok(response);
         }
     }
 }

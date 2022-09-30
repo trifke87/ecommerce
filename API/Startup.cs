@@ -1,6 +1,7 @@
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISupplierProductService, SupplierProductService>();
 
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
