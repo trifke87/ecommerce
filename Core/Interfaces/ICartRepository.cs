@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Common;
+using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Core.Interfaces
     {
         //todo
         //check what it should return
-        Task<Cart> AddProductToCartAsync(int customerId, int productId, int quantity);
+        Task<RValue<Cart>> AddProductToCartAsync (int customerId, int productId, int quantity);
         Task<Cart> GetCartContentByCustomerIdAsync(int id);
     }
 }

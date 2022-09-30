@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Common;
+using Core.Entities;
 using Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,14 @@ namespace Infrastructure.Data.Repositories
         }
         //todo
         //check if Cart need to be an interface
-        public async Task<Cart> AddProductToCartAsync(int customerId, int productId, int quantity)
+        public async Task<RValue<Cart>> AddProductToCartAsync(int customerId, int productId, int quantity)
         {
             var product = _storeContext.Products.FirstOrDefault(p => p.Id == productId);
 
             var cart = new Cart();
 
             if (product == null)
-                return cart;
+                return new RValue<Cart>(false, "Product doesn't exist");
 
             if (_productService.IsThereEnoughStocks(product, quantity))
             {
@@ -38,8 +39,10 @@ namespace Infrastructure.Data.Repositories
                 _storeContext.Carts.Add(cart);
                 await _storeContext.SaveChangesAsync();
             }
+            else
+                return new RValue<Cart>(false, "There is not enough quantity in stock");
 
-            return cart;
+            return new RValue<Cart>(true) { Value = cart };
         }
 
         public Task<Cart> GetCartContentByCustomerIdAsync(int id)

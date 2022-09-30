@@ -8,9 +8,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{0
 		{A909B5A7-5E5E-4B5B-AF86-092A68604DF7} = {A909B5A7-5E5E-4B5B-AF86-092A68604DF7}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{E63A2B19-CED1-46A6-8F25-7E69983EBCD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{E63A2B19-CED1-46A6-8F25-7E69983EBCD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{A909B5A7-5E5E-4B5B-AF86-092A68604DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{A909B5A7-5E5E-4B5B-AF86-092A68604DF7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E63A2B19-CED1-46A6-8F25-7E69983EBCD4} = {E63A2B19-CED1-46A6-8F25-7E69983EBCD4}
 	EndProjectSection

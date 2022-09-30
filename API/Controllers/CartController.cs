@@ -21,7 +21,9 @@ namespace API.Controllers
         {
             var response = await _repo.AddProductToCartAsync(customerId, productId, quantity);
 
-            return Ok(response);
+            if (response.Success == false)
+                return BadRequest(response.ErrorMessage);
+            return Ok(response.Value);
         }
     }
 }
