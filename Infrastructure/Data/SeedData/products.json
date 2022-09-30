@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "Chair",
+    "UnitPrice": 12,
+    "Quantity": 5
+  },
+  {
+    "Id": 2,
+    "Name": "Table",
+    "UnitPrice": 78.55,
+    "Quantity": 2
+  },
+  {
+    "Id": 3,
+    "Name": "Lamp",
+    "UnitPrice": 8.22,
+    "Quantity": 12
+  },
+  {
+    "Id": 4,
+    "Name": "Couch",
+    "UnitPrice": 355.55,
+    "Quantity": 1
+  }
+]
