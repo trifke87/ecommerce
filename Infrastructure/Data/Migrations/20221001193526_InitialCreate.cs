@@ -7,22 +7,18 @@ namespace Infrastructure.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Address",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
                     City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Street = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    HouseNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    HouseNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Address", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,23 +37,24 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderId = table.Column<int>(type: "INTEGER", nullable: true)
+                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AddressId = table.Column<int>(type: "INTEGER", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
+                        name: "FK_Orders_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -83,6 +80,28 @@ namespace Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_ProductId",
                 table: "Carts",
@@ -92,6 +111,11 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_OrderItems_OrderId",
                 table: "OrderItems",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_AddressId",
+                table: "Orders",
+                column: "AddressId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -107,6 +131,9 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Address");
         }
     }
 }

@@ -16,6 +16,32 @@ namespace Infrastructure.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.17");
 
+            modelBuilder.Entity("Core.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Address");
+                });
+
             modelBuilder.Entity("Core.Entities.Cart", b =>
                 {
                     b.Property<int>("Id")
@@ -44,10 +70,8 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("INTEGER");
@@ -55,17 +79,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
@@ -74,6 +88,8 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.ToTable("Orders");
                 });
@@ -133,6 +149,15 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Core.Entities.Order", b =>
+                {
+                    b.HasOne("Core.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Core.Entities.OrderItem", b =>

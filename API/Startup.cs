@@ -33,6 +33,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ISupplierProductService, SupplierProductService>();
 

@@ -15,7 +15,12 @@ namespace API.Helpers
             CreateMap<Cart, CartDto>()
                 .ForMember(d=>d.ProductId, o=>o.MapFrom(s=>s.Product.Id))
                 .ForMember(d=>d.ProductName, o=>o.MapFrom(s=>s.Product.Name))
-                .ForMember(d=>d.UnitPrice, o=>o.MapFrom(s=>s.Product.UnitPrice));    
+                .ForMember(d=>d.UnitPrice, o=>o.MapFrom(s=>s.Product.UnitPrice));
+
+            CreateMap<Address, AddressDto>().ReverseMap();
+
+            CreateMap<Order, OrderDto>()
+                .ForMember(d => d.OrderId, o => o.MapFrom(s => s.Id));
         }
     }
 }
