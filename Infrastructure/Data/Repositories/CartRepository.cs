@@ -45,9 +45,14 @@ namespace Infrastructure.Data.Repositories
             return new RValue<Cart>(true) { Value = cart };
         }
 
-        public Task<Cart> GetCartContentByCustomerIdAsync(int id)
+        public RValue<List<Cart>> GetCartContentByCustomerId(int customerId)
         {
-            throw new NotImplementedException();
+            var carts = _storeContext.Carts.Where(c => c.CustomerId == customerId).ToList();
+
+            if (carts == null || carts.Count == 0)
+                return new RValue<List<Cart>>(false, "There is no result for the given custumerId");
+
+            return new RValue<List<Cart>>(true) { Value = carts };
         }
     }
 }

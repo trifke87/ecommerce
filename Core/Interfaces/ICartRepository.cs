@@ -13,6 +13,6 @@ namespace Core.Interfaces
         //todo
         //check what it should return
         Task<RValue<Cart>> AddProductToCartAsync (int customerId, int productId, int quantity);
-        Task<Cart> GetCartContentByCustomerIdAsync(int id);
+        RValue<List<Cart>> GetCartContentByCustomerId(int customerId);
     }
 }

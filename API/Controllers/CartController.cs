@@ -22,7 +22,17 @@ namespace API.Controllers
             var response = await _repo.AddProductToCartAsync(customerId, productId, quantity);
 
             if (response.Success == false)
-                return BadRequest(response.ErrorMessage);
+                return NotFound(response.ErrorMessage);
+            return Ok(response.Value);
+        }
+
+        [HttpGet]
+        public ActionResult GetCartContent(int customerId)
+        {
+            var response = _repo.GetCartContentByCustomerId(customerId);
+
+            if (response.Success == false)
+                return NotFound(response.ErrorMessage);
             return Ok(response.Value);
         }
     }
