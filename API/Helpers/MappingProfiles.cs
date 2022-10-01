@@ -12,7 +12,10 @@ namespace API.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<Cart, CartDto>();
+            CreateMap<Cart, CartDto>()
+                .ForMember(d=>d.ProductId, o=>o.MapFrom(s=>s.Product.Id))
+                .ForMember(d=>d.ProductName, o=>o.MapFrom(s=>s.Product.Name))
+                .ForMember(d=>d.UnitPrice, o=>o.MapFrom(s=>s.Product.UnitPrice));    
         }
     }
 }

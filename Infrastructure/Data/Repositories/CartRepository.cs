@@ -1,6 +1,7 @@
 ﻿using Core.Common;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace Infrastructure.Data.Repositories
 
             if (IsThereEnoughStocksWithRemainingQuantity.Key)
             {
-                response = CartHandler(customerId, productId, quantity).Value;
+                response = CartHandler(customerId, product, quantity).Value;
 
                 ProductLocalQuantityHandler(product, IsThereEnoughStocksWithRemainingQuantity.Value);
 
@@ -49,7 +50,10 @@ namespace Infrastructure.Data.Repositories
 
         public RValue<List<Cart>> GetCartContentByCustomerId(int customerId)
         {
-            var carts = _storeContext.Carts.Where(c => c.CustomerId == customerId).ToList();
+            var carts = _storeContext.Carts
+                .Include(c=>c.Product)
+                .Where(c => c.CustomerId == customerId)
+                .ToList();
 
             if (carts == null || carts.Count == 0)
                 return new RValue<List<Cart>>(false, "There is no result for the given custumerId");
@@ -57,13 +61,13 @@ namespace Infrastructure.Data.Repositories
             return new RValue<List<Cart>>(true) { Value = carts };
         }
 
-        private RValue<string> CartHandler(int customerId, int productId, int quantity)
+        private RValue<string> CartHandler(int customerId, Product product, int quantity)
         {
-            var cartExist = _storeContext.Carts.FirstOrDefault(c => c.CustomerId == customerId && c.ProductId == productId);
+            var cartExist = _storeContext.Carts.FirstOrDefault(c => c.CustomerId == customerId && c.Product.Id == product.Id);
 
             if (cartExist == null)
             {
-                var response = AddNewItemToCart(customerId, productId, quantity);
+                var response = AddNewItemToCart(customerId, product, quantity);
                 return new RValue<string>(true) { Value = response.Value };
             }
             else
@@ -73,11 +77,11 @@ namespace Infrastructure.Data.Repositories
             }
         }
 
-        private RValue<string> AddNewItemToCart(int customerId, int productId, int quantity)
+        private RValue<string> AddNewItemToCart(int customerId, Product product, int quantity)
         {
             var cart = new Cart();
             cart.CustomerId = customerId;
-            cart.ProductId = productId;
+            cart.Product = product;
             cart.Quantity = quantity;
             _storeContext.Carts.Add(cart);
 
