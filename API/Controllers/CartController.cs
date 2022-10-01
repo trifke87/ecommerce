@@ -1,4 +1,7 @@
-﻿using Core.Interfaces;
+﻿using API.Dtos;
+using AutoMapper;
+using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,10 +13,12 @@ namespace API.Controllers
     public class CartController : BaseApiController
     {
         private readonly ICartRepository _repo;
+        private readonly IMapper _mapper;
 
-        public CartController(ICartRepository repo)
+        public CartController(ICartRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -33,7 +38,7 @@ namespace API.Controllers
 
             if (response.Success == false)
                 return NotFound(response.ErrorMessage);
-            return Ok(response.Value);
+            return Ok(_mapper.Map<List<Cart>, List<CartDto>>(response.Value));
         }
     }
 }
