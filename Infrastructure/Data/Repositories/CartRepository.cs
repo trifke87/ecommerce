@@ -59,7 +59,7 @@ namespace Infrastructure.Data.Repositories
 
         private RValue<string> CartHandler(int customerId, int productId, int quantity)
         {
-            var cartExist = _storeContext.Carts.FirstOrDefault(c => c.CustomerId == customerId);
+            var cartExist = _storeContext.Carts.FirstOrDefault(c => c.CustomerId == customerId && c.ProductId == productId);
 
             if (cartExist == null)
             {

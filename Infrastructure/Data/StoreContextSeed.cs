@@ -29,16 +29,6 @@ namespace Infrastructure.Data
 
                     await context.SaveChangesAsync();
                 }
-
-                if (context.Customers.Any() == false)
-                {
-                    var customerData = File.ReadAllText("../Infrastructure/Data/SeedData/customers.json");
-                    var customers = JsonSerializer.Deserialize<List<Customer>>(customerData);
-
-                    customers.ForEach(item => { context.Customers.Add(item); });
-
-                    await context.SaveChangesAsync();
-                }
             }
             catch (Exception ex)
             {

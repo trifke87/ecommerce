@@ -12,6 +12,7 @@ namespace Core.Entities
         //check if it need to be replaced with interface
         public int Id { get; set; }
         public List<OrderItem> ItemOrdered { get; set; }
+        public int CustomerId { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string HouseNumber { get; set; }
