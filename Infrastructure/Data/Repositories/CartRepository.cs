@@ -22,27 +22,29 @@ namespace Infrastructure.Data.Repositories
         }
         //todo
         //check if Cart need to be an interface
-        public async Task<RValue<Cart>> AddProductToCartAsync(int customerId, int productId, int quantity)
+        public async Task<RValue<string>> AddProductToCartAsync(int customerId, int productId, int quantity)
         {
+            string response = String.Empty;
+
             var product = _storeContext.Products.FirstOrDefault(p => p.Id == productId);
 
-            var cart = new Cart();
-
             if (product == null)
-                return new RValue<Cart>(false, "Product doesn't exist");
+                return new RValue<string>(false, "Product doesn't exist");
 
-            if (_productService.IsThereEnoughStocks(product, quantity))
+            var IsThereEnoughStocksWithRemainingQuantity = _productService.IsThereEnoughStocksWithRemainingLocalStocQuantity(product, quantity);
+
+            if (IsThereEnoughStocksWithRemainingQuantity.Key)
             {
-                cart.CustomerId = customerId;
-                cart.ProductId = productId;
-                cart.Quantity = quantity;
-                _storeContext.Carts.Add(cart);
+                response = CartHandler(customerId, productId, quantity).Value;
+
+                ProductLocalQuantityHandler(product, IsThereEnoughStocksWithRemainingQuantity.Value);
+
                 await _storeContext.SaveChangesAsync();
             }
             else
-                return new RValue<Cart>(false, "There is not enough quantity in stock");
+                return new RValue<string>(false, "There is not enough quantity in stock");
 
-            return new RValue<Cart>(true) { Value = cart };
+            return new RValue<string>(true) { Value = response };
         }
 
         public RValue<List<Cart>> GetCartContentByCustomerId(int customerId)
@@ -53,6 +55,47 @@ namespace Infrastructure.Data.Repositories
                 return new RValue<List<Cart>>(false, "There is no result for the given custumerId");
 
             return new RValue<List<Cart>>(true) { Value = carts };
+        }
+
+        private RValue<string> CartHandler(int customerId, int productId, int quantity)
+        {
+            var cartExist = _storeContext.Carts.FirstOrDefault(c => c.CustomerId == customerId);
+
+            if (cartExist == null)
+            {
+                var response = AddNewItemToCart(customerId, productId, quantity);
+                return new RValue<string>(true) { Value = response.Value };
+            }
+            else
+            {
+                var response = UpdateItemFromCart(cartExist, quantity);
+                return new RValue<string>(true) { Value = response.Value };
+            }
+        }
+
+        private RValue<string> AddNewItemToCart(int customerId, int productId, int quantity)
+        {
+            var cart = new Cart();
+            cart.CustomerId = customerId;
+            cart.ProductId = productId;
+            cart.Quantity = quantity;
+            _storeContext.Carts.Add(cart);
+
+            return new RValue<string>(true) { Value = "Item added to the cart" };
+        }
+
+        private RValue<string> UpdateItemFromCart(Cart cart, int quantity)
+        {
+            cart.Quantity = cart.Quantity + quantity;
+            _storeContext.Carts.Update(cart);
+
+            return new RValue<string>(true) { Value = "Cart item updated" };
+        }
+
+        private void ProductLocalQuantityHandler(Product product, int remaingQuantity)
+        {
+            product.Quantity = remaingQuantity;
+            _storeContext.Products.Update(product);
         }
     }
 }

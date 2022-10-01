@@ -17,26 +17,26 @@ namespace Infrastructure.Services
             _supplierProductService = supplierProductService;
         }
 
-        public bool IsThereEnoughStocks(Product product, int orderedQuantity)
+        public KeyValuePair<bool,int> IsThereEnoughStocksWithRemainingLocalStocQuantity(Product product, int orderedQuantity)
         {
-            int remainingQuantity = 0;
+            int remainingToOrderQuantity = 0;
 
-            var isThereEnoughLocalStocks = IsThereEnoughLocalStocksWithRemainingQuantity(product, orderedQuantity);
+            var IsThereEnoughLocalStocksWithRemainingToOrder = this.IsThereEnoughLocalStocksWithRemainingToOrder(product, orderedQuantity);
 
-            if (isThereEnoughLocalStocks.Key)
-                return true;
+            if (IsThereEnoughLocalStocksWithRemainingToOrder.Key)
+                return new KeyValuePair<bool, int>(true, product.Quantity - orderedQuantity);
             else
-                remainingQuantity = isThereEnoughLocalStocks.Value;
+                remainingToOrderQuantity = IsThereEnoughLocalStocksWithRemainingToOrder.Value;
 
-            if (IsThereEnoughSupplierStocks(product.Id, remainingQuantity))
-                return true;
+            if (IsThereEnoughSupplierStocks(product.Id, remainingToOrderQuantity))
+                return new KeyValuePair<bool, int>(true, 0);
 
-            return false;
+            return new KeyValuePair<bool, int>(false, product.Quantity);
         }
 
-        private KeyValuePair<bool, int> IsThereEnoughLocalStocksWithRemainingQuantity(Product product, int orderedQuantity)
+        private KeyValuePair<bool, int> IsThereEnoughLocalStocksWithRemainingToOrder(Product product, int orderedQuantity)
         {
-            int remainingQuantity = orderedQuantity;
+            int remainingQuantityToOrder = orderedQuantity;
 
             if (product.Quantity >= orderedQuantity)
             {
@@ -44,21 +44,21 @@ namespace Infrastructure.Services
             }
             else
             {
-                remainingQuantity = remainingQuantity - product.Quantity;
-                return new KeyValuePair<bool, int>(false, remainingQuantity);
+                remainingQuantityToOrder = remainingQuantityToOrder - product.Quantity;
+                return new KeyValuePair<bool, int>(false, remainingQuantityToOrder);
             }
         }
 
-        private bool IsThereEnoughSupplierStocks(int productId, int remainingQuantity)
+        private bool IsThereEnoughSupplierStocks(int productId, int remainingToOrderQuantity)
         {
             var supplierStock = _supplierProductService.GetSupplierProductInfo(productId);
 
             if (supplierStock == null)
                 return false;
 
-            if (supplierStock.Quantity >= remainingQuantity)
+            if (supplierStock.Quantity >= remainingToOrderQuantity)
                 return true;
-            else if (supplierStock.Quantity - remainingQuantity >= 0)
+            else if (supplierStock.Quantity - remainingToOrderQuantity >= 0)
                 return true;
 
             return false;

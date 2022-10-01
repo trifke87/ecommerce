@@ -1,9 +1,10 @@
 ﻿using Core.Entities;
+using System.Collections.Generic;
 
 namespace Core.Interfaces
 {
     public interface IProductService
     {
-        bool IsThereEnoughStocks(Product product, int orderedQuantity);
+        KeyValuePair<bool, int> IsThereEnoughStocksWithRemainingLocalStocQuantity(Product product, int orderedQuantity);
     }
 }
