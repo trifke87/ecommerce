@@ -14,16 +14,22 @@ namespace API.Controllers
     {
         private readonly ICartRepository _repo;
         private readonly IMapper _mapper;
+        private readonly ICartValidator _validator;
 
-        public CartController(ICartRepository repo, IMapper mapper)
+        public CartController(ICartRepository repo, IMapper mapper, ICartValidator validator)
         {
             _repo = repo;
             _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpPost]
         public async Task<ActionResult> AddToShopingCart(int customerId, int productId, int quantity)
         {
+            var validation = _validator.AddToShopingCartValidate(customerId, productId, quantity);
+            if (validation.Success == false)
+                return BadRequest(validation.ErrorMessage);
+
             var response = await _repo.AddProductToCartAsync(customerId, productId, quantity);
 
             if (response.Success == false)
@@ -34,6 +40,10 @@ namespace API.Controllers
         [HttpGet]
         public ActionResult GetCartContent(int customerId)
         {
+            var validation = _validator.GetCartContentValidate(customerId);
+            if (validation.Success == false)
+                return BadRequest(validation.ErrorMessage);
+
             var response = _repo.GetCartContentByCustomerId(customerId);
 
             if (response.Success == false)

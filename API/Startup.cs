@@ -2,6 +2,7 @@ using API.Helpers;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
+using Infrastructure.Data.Validations;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,8 @@ namespace API
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderValidation, OrderValidation>();
+            services.AddScoped<ICartValidator, CartValidator>();
             services.AddScoped<ISupplierProductService, SupplierProductService>();
 
             services.AddControllers();

@@ -14,16 +14,22 @@ namespace API.Controllers
     {
         private readonly IOrderRepository _repo;
         private readonly IMapper _mapper;
+        private readonly IOrderValidation _validator;
 
-        public OrderController(IOrderRepository repo, IMapper mapper)
+        public OrderController(IOrderRepository repo, IMapper mapper, IOrderValidation validator)
         {
             _repo = repo;
             _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateOrder(int customerId, AddressDto address, string phoneNumber)
         {
+            var validation = _validator.CreateOrderValidation(customerId, _mapper.Map<AddressDto, Address>(address), phoneNumber);
+            if (validation.Success == false)
+                return BadRequest(validation.ErrorMessage);
+
             var response = await _repo.CreateOrder(customerId, _mapper.Map<AddressDto, Address>(address), phoneNumber);
 
             if (response.Success == false)
