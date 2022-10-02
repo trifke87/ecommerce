@@ -1,6 +1,7 @@
 ﻿using API;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Respawn;
 
 namespace Test.NUnit.Infrastructure.Integration.Test
 {
@@ -19,27 +21,38 @@ namespace Test.NUnit.Infrastructure.Integration.Test
     {
         private static IConfiguration _configuration;
         private static IServiceScopeFactory _scopeFactory;
+        private static Checkpoint _checkpoint;
 
         [OneTimeSetUp]
         public void RunBeforeAnyTest()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings", true, true)
+                .AddJsonFile("appsettings.json", true, true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
 
-            var serveces = new ServiceCollection();
+            var services = new ServiceCollection();
             var startup = new Startup(_configuration);
 
-            serveces.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
+            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
             w.ApplicationName == "API" &&
             w.EnvironmentName == "Development"));
 
-            startup.ConfigureServices(serveces);
+            startup.ConfigureServices(services);
 
-            _scopeFactory = serveces.BuildServiceProvider().GetService<IServiceScopeFactory>();
+            _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
+
+            _checkpoint = new Checkpoint
+            {
+                TablesToIgnore = new[] { "__EFMigrationsHistory" }
+            };
+        }
+
+        public static async Task ResetState()
+        {
+            await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
         }
 
         public static async Task AddAsync<TEntity>(TEntity entity)
@@ -47,12 +60,12 @@ namespace Test.NUnit.Infrastructure.Integration.Test
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var contex = scope.ServiceProvider.GetService<StoreContext>();
+            var context = scope.ServiceProvider.GetService<StoreContext>();
 
-            contex.Add(entity);
-            await contex.SaveChangesAsync();
+            await context.Database.MigrateAsync();
+
+            context.Add(entity);
+            await context.SaveChangesAsync();
         }
-
-        //public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
     }
 }
