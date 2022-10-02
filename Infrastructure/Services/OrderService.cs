@@ -18,38 +18,26 @@ namespace Infrastructure.Services
             if (isParsed == false)
                 return 0;
 
-            var result = 0m;
+            if (IsEndWithZero(lastNumber)) return 0.3m;
+            if (IsAnEvenDigit(lastNumber)) return 0.2m;
+            if (IsAnOddDigit(lastNumber)) return 0.1m;
 
-            if (lastNumber == 0) return 0.3m;
-            if (lastNumber % 2 != 0) return 0.2m;
-            if (lastNumber % 2 == 0) return 0.1m;
-
-            //result = IsAnOddDigit(lastNumber);
-            //result = IsAnEvenDigit(lastNumber);
-            //result = EndWithZero(lastNumber);
-
-            return result;
-        }
-
-        private decimal IsAnOddDigit(int lastNumber)
-        {
-            if (lastNumber % 2 == 0)
-                return 0.1m;
             return 0;
         }
 
-        private decimal IsAnEvenDigit(int lastNumber)
+        private bool IsAnOddDigit(int lastNumber)
         {
-            if (lastNumber % 2 != 0)
-                return 0.2m;
-            return 0;
+            return lastNumber % 2 == 0 ? true : false;
         }
 
-        private decimal EndWithZero(int lastNumber)
+        private bool IsAnEvenDigit(int lastNumber)
         {
-            if (lastNumber == 0)
-                return 0.3m;
-            return 0;
+            return lastNumber % 2 != 0 ? true : false;
+        }
+
+        private bool IsEndWithZero(int lastNumber)
+        {
+            return lastNumber == 0 ? true : false;
         }
     }
 }

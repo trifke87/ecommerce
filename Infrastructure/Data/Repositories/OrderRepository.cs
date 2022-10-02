@@ -32,7 +32,7 @@ namespace Infrastructure.Data.Repositories
 
             var order = CreateOrderDetails(address, carts, phoneNumber);
 
-            if (IsHappyHour(new TimeSpan(0, 0, 0), new TimeSpan(1, 0, 0)))
+            if (IsHappyHour(new TimeSpan(16, 0, 0), new TimeSpan(17, 0, 0)))
             {
                 var discount = _orderService.DiscountRate(phoneNumber);
 
