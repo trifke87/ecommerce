@@ -52,7 +52,10 @@ namespace Test.NUnit.Infrastructure.Integration.Test
 
         public static async Task ResetState()
         {
-            await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
+            using var scope = _scopeFactory.CreateScope();
+            var context = scope.ServiceProvider.GetService<StoreContext>();
+
+            await context.Database.EnsureDeletedAsync();
         }
 
         public static async Task AddAsync<TEntity>(TEntity entity)
@@ -66,6 +69,12 @@ namespace Test.NUnit.Infrastructure.Integration.Test
 
             context.Add(entity);
             await context.SaveChangesAsync();
+        }
+
+        public static StoreContext GetContext()
+        {
+            using var scope = _scopeFactory.CreateScope();
+            return scope.ServiceProvider.GetService<StoreContext>();
         }
     }
 }
