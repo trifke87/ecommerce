@@ -20,7 +20,7 @@ namespace Infrastructure.Data.Repositories
             _storeContext = storeContext;
             _orderService = orderService;
         }
-        public async Task<RValue<Order>> CreateOrder(int customerId, Address address, string phoneNumber)
+        public async Task<RValue<Order>> CreateOrderAsync(int customerId, Address address, string phoneNumber)
         {
             var carts = _storeContext.Carts
                 .Include(c => c.Product)

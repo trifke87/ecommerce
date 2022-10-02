@@ -30,7 +30,7 @@ namespace API.Controllers
             if (validation.Success == false)
                 return BadRequest(validation.ErrorMessage);
 
-            var response = await _repo.CreateOrder(customerId, _mapper.Map<AddressDto, Address>(address), phoneNumber);
+            var response = await _repo.CreateOrderAsync(customerId, _mapper.Map<AddressDto, Address>(address), phoneNumber);
 
             if (response.Success == false)
                 return NotFound(response.ErrorMessage);

@@ -6,6 +6,6 @@ namespace Core.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<RValue<Order>> CreateOrder(int customerId, Address address, string phoneNumber);
+        Task<RValue<Order>> CreateOrderAsync(int customerId, Address address, string phoneNumber);
     }
 }
