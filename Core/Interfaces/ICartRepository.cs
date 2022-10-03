@@ -10,8 +10,6 @@ namespace Core.Interfaces
 {
     public interface ICartRepository
     {
-        //todo
-        //check what it should return
         Task<RValue<string>> AddProductToCartAsync (int customerId, int productId, int quantity);
         RValue<List<Cart>> GetCartContentByCustomerId(int customerId);
     }

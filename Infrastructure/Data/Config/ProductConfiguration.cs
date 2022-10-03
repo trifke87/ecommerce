@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Config
 {
-    //todo
-    //check if it need to be replaced with interface
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)

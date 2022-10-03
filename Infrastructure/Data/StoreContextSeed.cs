@@ -12,14 +12,10 @@ namespace Infrastructure.Data
 {
     public class StoreContextSeed
     {
-        //todo
-        //check if it need to be replaced with interface
         public static async Task SeedAsync(StoreContext context, ILoggerFactory loggerFactory)
         {
             try
             {
-                //todo
-                //one class should be responsible only for one thing
                 if (context.Products.Any() == false)
                 {
                     var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");

@@ -11,8 +11,6 @@ namespace Infrastructure.Data.Config
 {
     public class AddressConfiguration : IEntityTypeConfiguration<Address>
     {
-        //todo
-        //check if it need to be replaced with interface
         public void Configure(EntityTypeBuilder<Address> builder)
         {
             builder.Property(p => p.City).IsRequired().HasMaxLength(100);

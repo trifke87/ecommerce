@@ -15,8 +15,6 @@ namespace Infrastructure.Data
         {
         }
 
-        //todo
-        //check if it need to be replaced with interface
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }

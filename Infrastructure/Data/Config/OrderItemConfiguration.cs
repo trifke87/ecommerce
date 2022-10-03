@@ -11,8 +11,6 @@ namespace Infrastructure.Data.Config
 {
     public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {
-        //todo
-        //check if it need to be replaced with interface
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
             builder.Property(p=>p.UnitPrice).HasColumnType("decimal(18,2)");

@@ -11,8 +11,6 @@ namespace Infrastructure.Data.Config
 {
     public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
-        //todo
-        //check if it need to be replaced with interface
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(100);
