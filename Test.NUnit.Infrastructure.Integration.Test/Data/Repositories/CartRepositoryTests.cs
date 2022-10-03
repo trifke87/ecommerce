@@ -13,7 +13,7 @@ using Infrastructure.Data;
 namespace Test.NUnit.Infrastructure.Integration.Test.Data.Repositories
 {
     using static Testing;
-    public class CartRepositoryTest : TestBase
+    public class CartRepositoryTests : TestBase
     {
         [Test]
         public async Task AddProductToCartAsync_ShouldReturnFalseWhenProductDoesntExist()

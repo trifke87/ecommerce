@@ -21,7 +21,7 @@ namespace Infrastructure.Data.Validations
             if (quantity <= 0)
                 return new RValue<bool>(false, "quantity cannot be less than 1");
 
-            return new RValue<bool>(true);
+            return new RValue<bool>(true) { Value = true};
         }
 
         public RValue<bool> GetCartContentValidate(int customerId)
@@ -29,7 +29,7 @@ namespace Infrastructure.Data.Validations
             if (customerId <= 0)
                 return new RValue<bool>(false, "customerId cannot be less than 1");
 
-            return new RValue<bool>(true);
+            return new RValue<bool>(true) { Value = true};
         }
     }
 }

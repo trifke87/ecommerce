@@ -19,14 +19,15 @@ namespace Infrastructure.Data.Validations
             if (customerId <= 0)
                 return new RValue<bool>(false, "customerId cannot be less than 1");
 
-            if (address.City.Length == 0 || address.HouseNumber.Length == 0 || address.Street.Length == 0)
+            if (address.City == null || address.Street == null || address.HouseNumber == null 
+                || address.City.Length == 0 || address.HouseNumber.Length == 0 || address.Street.Length == 0)
                 return new RValue<bool>(false, "Address info are required");
 
             if (PhoneNumberValidation(phoneNumber) == false)
                 return new RValue<bool>(false, "Phone number is not in a valid format. Phone number can " +
                     "contain only numbers from 0 to 9. Example: 12144379402.");
 
-            return new RValue<bool>(true);
+            return new RValue<bool>(true) { Value = true };
         }
 
         private bool PhoneNumberValidation(string phoneNumber)

@@ -27,12 +27,12 @@ namespace Infrastructure.Services
 
         private bool IsAnOddDigit(int lastNumber)
         {
-            return lastNumber % 2 == 0 ? true : false;
+            return lastNumber % 2 != 0 ? true : false;
         }
 
         private bool IsAnEvenDigit(int lastNumber)
         {
-            return lastNumber % 2 != 0 ? true : false;
+            return lastNumber % 2 == 0 ? true : false;
         }
 
         private bool IsEndWithZero(int lastNumber)
