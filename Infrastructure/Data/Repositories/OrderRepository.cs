@@ -35,11 +35,6 @@ namespace Infrastructure.Data.Repositories
 
             if (IsHappyHour(new TimeSpan(16, 0, 0), new TimeSpan(17, 0, 0)))
             {
-                //var discount = _orderService.DiscountRate(phoneNumber);
-
-                //if (discount > 0)
-                    //order = ApplyDiscount(order, discount);
-
                 var discount = new Discount();
 
                 foreach (var orderItem in order.ItemOrdered)
@@ -62,22 +57,6 @@ namespace Infrastructure.Data.Repositories
             if (DateTime.Now.TimeOfDay >= timeStart && DateTime.Now.TimeOfDay <= timeEnd)
                 return true;
             return false;
-        }
-
-        //todo to be deleted
-        private Order ApplyDiscount(Order order, decimal discountRate)
-        {
-            var discountAmount = 0m;
-
-            foreach (var item in order.ItemOrdered)
-            {
-                discountAmount = discountAmount + (item.UnitPrice * discountRate) * item.Quantity;
-            }
-
-            order.Discount = discountAmount;
-            order.TotalAmount = order.TotalAmount - discountAmount;
-
-            return order;
         }
 
         private Order CreateOrderDetails(Address address, List<Cart> carts, string phoneNumber)

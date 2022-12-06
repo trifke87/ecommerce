@@ -14,7 +14,6 @@ namespace Core.Entities
         public decimal UnitPrice { get; set; }
         public decimal Discount { get; set; }
         public decimal DiscountAmount { get; set; }
-        public decimal OriginalUnitPrice { get; set; }
         public int Quantity { get; set; }
     }
 }
