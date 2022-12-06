@@ -14,6 +14,8 @@ namespace Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
             builder.Property(p=>p.UnitPrice).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.DiscountAmount).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.OriginalUnitPrice).HasColumnType("decimal(18,2)");
         }
     }
 }
