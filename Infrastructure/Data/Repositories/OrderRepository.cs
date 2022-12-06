@@ -1,4 +1,5 @@
-﻿using Core.Common;
+﻿using Core.Business;
+using Core.Common;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -34,10 +35,18 @@ namespace Infrastructure.Data.Repositories
 
             if (IsHappyHour(new TimeSpan(16, 0, 0), new TimeSpan(17, 0, 0)))
             {
-                var discount = _orderService.DiscountRate(phoneNumber);
+                //var discount = _orderService.DiscountRate(phoneNumber);
 
-                if (discount > 0)
-                    order = ApplyDiscount(order, discount);
+                //if (discount > 0)
+                    //order = ApplyDiscount(order, discount);
+
+                var discount = new Discount();
+
+                foreach (var orderItem in order.ItemOrdered)
+                {
+                    var orIt = order.ItemOrdered.FirstOrDefault(i => i.Id == orderItem.Id);
+                        orIt = discount.CalculateDiscount(orderItem, phoneNumber);
+                }
             }
 
             await _storeContext.Orders.AddAsync(order);
@@ -55,6 +64,7 @@ namespace Infrastructure.Data.Repositories
             return false;
         }
 
+        //todo to be deleted
         private Order ApplyDiscount(Order order, decimal discountRate)
         {
             var discountAmount = 0m;
