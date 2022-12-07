@@ -37,11 +37,7 @@ namespace Infrastructure.Data.Repositories
             {
                 var discount = new Discount();
 
-                foreach (var orderItem in order.ItemOrdered)
-                {
-                    var orIt = order.ItemOrdered.FirstOrDefault(i => i.Id == orderItem.Id);
-                        orIt = discount.CalculateDiscount(orderItem, phoneNumber);
-                }
+                order = discount.CalculateDiscount(order, phoneNumber);
             }
 
             await _storeContext.Orders.AddAsync(order);

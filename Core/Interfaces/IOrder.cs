@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
-    public interface IOrderItem
+    public interface IOrder
     {
-        decimal UnitPrice { get; set; }
+        List<OrderItem> ItemOrdered { get; set; }
         decimal Discount { get; set; }
-        decimal DiscountAmount { get; set; }
+        decimal TotalAmount { get; set; }
     }
 }

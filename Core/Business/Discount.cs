@@ -10,21 +10,27 @@ namespace Core.Business
 {
     public class Discount
     {
-        public OrderItem CalculateDiscount(OrderItem orderItem, string phoneNumber)
+        public Order CalculateDiscount(Order order, string phoneNumber)
         {
             var lastNumberChar = phoneNumber[phoneNumber.Length - 1];
             int lastNumber = 0;
             var isParsed = int.TryParse(lastNumberChar.ToString(), out lastNumber);
 
             if (isParsed == false)
-                return orderItem;
+                return order;
 
             if (IsEndWithZero(lastNumber)) 
             {
-                var thirtyDiscount = new ThirtyPercentDecorator(orderItem);
-                orderItem.Discount = thirtyDiscount.Discount;
-                orderItem.DiscountAmount = thirtyDiscount.DiscountAmount;
-                orderItem.UnitPrice = thirtyDiscount.UnitPrice;
+                var thirtyDiscount = new ThirtyPercentDecorator(order);
+                order.Discount = thirtyDiscount.Discount;
+
+                //order.ItemOrdered.ForEach((item) =>
+                //{
+                //    item.DiscountAmount = item.UnitPrice * order.Discount;
+                //    item.UnitPrice = item.UnitPrice - item.DiscountAmount;
+                //});
+                order.ItemOrdered = thirtyDiscount.ItemOrdered;
+                order.TotalAmount = thirtyDiscount.TotalAmount;
             }
 
             if (IsAnEvenDigit(lastNumber))
@@ -38,7 +44,7 @@ namespace Core.Business
             //if (IsAnOddDigit(lastNumber)) return 0.1m;
 
 
-            return orderItem;
+            return order;
         }
 
         //private bool IsAnOddDigit(int lastNumber)
