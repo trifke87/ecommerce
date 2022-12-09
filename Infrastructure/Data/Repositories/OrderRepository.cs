@@ -14,12 +14,10 @@ namespace Infrastructure.Data.Repositories
     public class OrderRepository : IOrderRepository
     {
         private readonly StoreContext _storeContext;
-        private readonly IOrderService _orderService;
 
-        public OrderRepository(StoreContext storeContext, IOrderService orderService)
+        public OrderRepository(StoreContext storeContext)
         {
             _storeContext = storeContext;
-            _orderService = orderService;
         }
         public async Task<RValue<Order>> CreateOrderAsync(int customerId, Address address, string phoneNumber)
         {
@@ -37,7 +35,7 @@ namespace Infrastructure.Data.Repositories
             {
                 var discount = new Discount();
 
-                order = discount.CalculateDiscount(order, phoneNumber);
+                discount.CalculateDiscount(order, phoneNumber);
             }
 
             await _storeContext.Orders.AddAsync(order);
@@ -50,7 +48,7 @@ namespace Infrastructure.Data.Repositories
 
         public bool IsHappyHour(TimeSpan timeStart, TimeSpan timeEnd)
         {
-            if (DateTime.Now.TimeOfDay >= timeStart && DateTime.Now.TimeOfDay <= timeEnd)
+            if (DateTime.UtcNow.TimeOfDay >= timeStart && DateTime.UtcNow.TimeOfDay <= timeEnd)
                 return true;
             return false;
         }

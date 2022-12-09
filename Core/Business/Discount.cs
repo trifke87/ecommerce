@@ -24,33 +24,29 @@ namespace Core.Business
                 var thirtyDiscount = new ThirtyPercentDecorator(order);
                 order.Discount = thirtyDiscount.Discount;
 
-                //order.ItemOrdered.ForEach((item) =>
-                //{
-                //    item.DiscountAmount = item.UnitPrice * order.Discount;
-                //    item.UnitPrice = item.UnitPrice - item.DiscountAmount;
-                //});
                 order.ItemOrdered = thirtyDiscount.ItemOrdered;
                 order.TotalAmount = thirtyDiscount.TotalAmount;
             }
 
             if (IsAnEvenDigit(lastNumber))
             {
+                var twentyDiscount = new TwentyPercentDecorator(order);
+                order.Discount = twentyDiscount.Discount;
 
+                order.ItemOrdered = twentyDiscount.ItemOrdered;
+                order.TotalAmount = twentyDiscount.TotalAmount;
             }
             else
             {
+                var tenDiscount = new TenPercentDecorator(order);
+                order.Discount = tenDiscount.Discount;
 
+                order.ItemOrdered = tenDiscount.ItemOrdered;
+                order.TotalAmount = tenDiscount.TotalAmount;
             }
-            //if (IsAnOddDigit(lastNumber)) return 0.1m;
-
 
             return order;
         }
-
-        //private bool IsAnOddDigit(int lastNumber)
-        //{
-        //    return lastNumber % 2 != 0 ? true : false;
-        //}
 
         private bool IsAnEvenDigit(int lastNumber)
         {
